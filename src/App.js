@@ -1,9 +1,9 @@
 import "./App.css";
-import React, { Component } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const getBackGroundColor = ({ degree, backGroundColors }) => {
-  let string = `${degree}deg`;
+  let string = `${degree || 135}deg`;
 
   for (let i = 0; i < backGroundColors.length; i++) {
     string += `, ${backGroundColors[i]}`;
@@ -24,61 +24,53 @@ const StyledMain = styled.main`
     sans-serif;
 `;
 
-class App extends Component {
-  state = {
-    backgroundColors: ["#d4d4d4", "#34e791", "#000000"],
-    degree: 45,
-  };
+const App = () => {
+  const [backgroundColors, setBackgroundColors] = useState(["#d4d4d4", "#34e791", "#000000"])
+  const [degree, setDegree] = useState(45)
 
-  handleDegreeChange = (event) => {
-    const newDegree = event.target.value;
-    this.setState({ degree: newDegree });
-  };
+  const handleColorChange = (event, i) => {
+    const newColor = event.target.value
 
-  handleColourChange = (event, index) => {
-    // console.log(event.target.value)
-    const newColor = event.target.value;
+    const newBackgroundColors = [...backgroundColors]
 
-    // Create a copy of the backGroundColor array
-    const newBackgroundColor = [...this.state.backgroundColors];
-    // Change value of array
-    newBackgroundColor[index] = newColor;
-    // Set new array as new state
-    this.setState({ backgroundColors: newBackgroundColor }); // this will conduct the render method
-  };
+    newBackgroundColors[i] = newColor
 
-  render() {
-    const { degree, backgroundColors: backgroundColors } = this.state;
-
-    return (
-      // Pass chosen color into main and set background
-      <StyledMain backGroundColors={backgroundColors} degree={degree}>
-        <h1>CSS Gradient Generator</h1>
-        <div>
-          Angle:
-          <input
-            type="number"
-            value={degree}
-            onChange={(event) => this.handleDegreeChange(event)}
-            style={{ width: "100px" }}
-          />
-          {backgroundColors.map((color, index) => {
-            return (
-              <div key={index}>
-                Colour #{index + 1}:{" "}
-                <input
-                  type="color"
-                  value={color}
-                  onChange={(event) => this.handleColourChange(event, index)}
-                />
-              </div>
-            );
-          })}
-          {/* Colour #2: <input type="color" /> */}
-        </div>
-      </StyledMain>
-    );
+    setBackgroundColors(newBackgroundColors)
   }
+
+  const handleDegree = (event) => {
+    const newDegree = event.target.value
+    setDegree(newDegree)
+  }
+
+  return (
+    <StyledMain backgroundColors={backgroundColors} degree={degree}>
+      <h1>CSS Gradient Generator</h1>
+      <div>
+        Angle:
+        <input
+          type="number"
+          value={degree}
+          onChange={(event) => handleDegree(event)}
+          style={{ width: "100px" }}
+        />
+        {backgroundColors.map((color, index) => {
+          return (
+            <div key={index}>
+              Colour #{index + 1}:{" "}
+              <input
+                key={color}
+                type="color"
+                value={color}
+                onChange={(event) => handleColorChange(event, index)}
+              />
+            </div>
+          );
+        })}
+        {/* Colour #2: <input type="color" /> */}
+      </div>
+    </StyledMain>
+  )
 }
 
 export default App;
