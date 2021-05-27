@@ -2,8 +2,8 @@ import "./App.css";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-export const getBackgroundCSS = ( backgroundColors ) => {
-  let string = `background: linear-gradient(45deg,`;
+export const getBackgroundCSS = ( degree, backgroundColors ) => {
+  let string = `background: linear-gradient(${degree || 135}deg,`;
   string += backgroundColors.join(",")
   string += ");"
 
@@ -23,19 +23,22 @@ const StyledMain = styled.main`
     sans-serif;
 `;
 
-const updateLocalStorage = (state) => {
+const updateLocalStorage = (degree, backgroundColors) => {
   // JSON stringify state
-  const stringState = JSON.stringify(state)
+  const stringDegree = JSON.stringify(degree)
+  const stringBackgroundColors = JSON.stringify(backgroundColors)
   // save string to localstorage
-  localStorage.setItem('backgroundColors', stringState)
+  localStorage.setItem('degree', stringDegree)
+  localStorage.setItem('backgroundColors', stringBackgroundColors)
 }
 
 const getFromLocalStorage = () => {
+  const degree = localStorage.getItem('degree')
   const colors = localStorage.getItem('backgroundColors')
   if (!colors) {
     return null
   }
-  return JSON.parse(colors)
+  return [JSON.parse(degree), JSON.parse(colors)]
 }
 
 const App = () => {
@@ -44,16 +47,19 @@ const App = () => {
 
   // Initial run
   useEffect(() => {
-    const colors = getFromLocalStorage
-    if (colors) {
-      setBackgroundColors(colors)
+    const [degree, backgroundColors] = getFromLocalStorage()
+    if (backgroundColors) {
+      setBackgroundColors(backgroundColors)
+    }
+    if (degree) {
+      setDegree(degree)
     }
   }, [])
 
   // Runs everytime there is a change
   useEffect(() => {
-    updateLocalStorage(backgroundColors)
-  }, [backgroundColors])
+    updateLocalStorage(degree, backgroundColors)
+  }, [degree, backgroundColors])
 
   const handleColorChange = (event, i) => {
     const newColor = event.target.value
@@ -62,13 +68,13 @@ const App = () => {
     setBackgroundColors(newBackgroundColors)
   }
   
-  const backgroundCSS = getBackgroundCSS(backgroundColors)
+  const backgroundCSS = getBackgroundCSS(degree, backgroundColors)
   
   const addColor = () => {
     // clone the existing
     const newBackgroundColors = [...backgroundColors]
     // add new color at the end
-    newBackgroundColors.push("#404040")
+    newBackgroundColors.push("#ffffff")
     // set it into state
     setBackgroundColors(newBackgroundColors)
   }
