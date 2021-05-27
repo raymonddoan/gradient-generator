@@ -26,7 +26,7 @@ const StyledMain = styled.main`
 
 class App extends Component {
   state = {
-    backGroundColors: ["#d4d4d4", "#34e791", "#000000"],
+    backgroundColors: ["#d4d4d4", "#34e791", "#000000"],
     degree: 45,
   };
 
@@ -40,19 +40,19 @@ class App extends Component {
     const newColor = event.target.value;
 
     // Create a copy of the backGroundColor array
-    const newBackgroundColor = [...this.state.backGroundColors];
+    const newBackgroundColor = [...this.state.backgroundColors];
     // Change value of array
     newBackgroundColor[index] = newColor;
     // Set new array as new state
-    this.setState({ backGroundColors: newBackgroundColor }); // this will conduct the render method
+    this.setState({ backgroundColors: newBackgroundColor }); // this will conduct the render method
   };
 
   render() {
-    const { degree, backGroundColors } = this.state;
+    const { degree, backgroundColors: backgroundColors } = this.state;
 
     return (
       // Pass chosen color into main and set background
-      <StyledMain backGroundColors={backGroundColors} degree={degree}>
+      <StyledMain backGroundColors={backgroundColors} degree={degree}>
         <h1>CSS Gradient Generator</h1>
         <div>
           Angle:
@@ -62,7 +62,7 @@ class App extends Component {
             onChange={(event) => this.handleDegreeChange(event)}
             style={{ width: "100px" }}
           />
-          {backGroundColors.map((color, index) => {
+          {backgroundColors.map((color, index) => {
             return (
               <div key={index}>
                 Colour #{index + 1}:{" "}
