@@ -23,6 +23,7 @@ const StyledMain = styled.main`
     sans-serif;
 `;
 
+// Setting up Local Storage
 const updateLocalStorage = (degree, backgroundColors) => {
   // JSON stringify state
   const stringDegree = JSON.stringify(degree)
@@ -41,11 +42,12 @@ const getFromLocalStorage = () => {
   return [JSON.parse(degree), JSON.parse(colors)]
 }
 
+// Application
 const App = () => {
   const [backgroundColors, setBackgroundColors] = useState(["#d4d4d4", "#34e791", "#000000"])
   const [degree, setDegree] = useState(45)
 
-  // Initial run
+  // Runs initially when the App is 'mounted'
   useEffect(() => {
     const [degree, backgroundColors] = getFromLocalStorage()
     if (backgroundColors) {
@@ -56,11 +58,12 @@ const App = () => {
     }
   }, [])
 
-  // Runs everytime there is a change
+  // Runs everytime there is a change in the stored variables
   useEffect(() => {
     updateLocalStorage(degree, backgroundColors)
   }, [degree, backgroundColors])
 
+  // Handles the color change entry into the background colour
   const handleColorChange = (event, i) => {
     const newColor = event.target.value
     const newBackgroundColors = [...backgroundColors]
@@ -68,8 +71,10 @@ const App = () => {
     setBackgroundColors(newBackgroundColors)
   }
   
+  // Sets up the string for the Styling Component
   const backgroundCSS = getBackgroundCSS(degree, backgroundColors)
   
+  // Create additional colours to be rendered as a part of the gradient
   const addColor = () => {
     // clone the existing
     const newBackgroundColors = [...backgroundColors]
@@ -79,6 +84,7 @@ const App = () => {
     setBackgroundColors(newBackgroundColors)
   }
 
+  // Removes the colour in the Array, based on the index
   const removeColor = (index) => {
     // clone
     const newBackgroundColors = [...backgroundColors]
@@ -88,11 +94,13 @@ const App = () => {
     setBackgroundColors(newBackgroundColors)
   }
 
+  // Degree is persistent and will be updated when editted. Default is 45, and 135 when there is no degree value provided
   const handleDegree = (event) => {
     const newDegree = event.target.value
     setDegree(newDegree)
   }
 
+  // Renders the App here
   return (
     <StyledMain backgroundCSS={backgroundCSS}>
       <h1>CSS Gradient Generator</h1>
@@ -118,7 +126,7 @@ const App = () => {
         )}
         <br />
         <button type="submit" onClick={addColor}>Add Colour</button>
-        <p>{backgroundCSS}</p>
+        <h3>{backgroundCSS}</h3>
       </div>
     </StyledMain>
   )
