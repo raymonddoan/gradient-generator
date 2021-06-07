@@ -15,6 +15,7 @@ const StyledMain = styled.main`
   ${props => props.backgroundCSS}
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   height: 100%;
   width: 100%;
